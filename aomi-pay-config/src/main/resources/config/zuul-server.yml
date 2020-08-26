@@ -1,0 +1,55 @@
+zuul:
+  #  retryable: true
+  #  add-host-header: true
+  # ignoredServices: "*"
+  #  sensitiveHeaders: "*"
+  host:
+    socket-timeout-millis: 60000
+    connect-timeout-millis: 30000
+  routes:
+    api:
+      path: /api/**
+      serviceId: service-api
+    user:
+      path: /user/**
+      serviceId: service-user
+    order:
+      path: /order/**
+      serviceId: service-order
+    dictionary:
+      path: /dictionary/**
+      serviceId: service-dictionary
+    h5:
+      path: /h5/**
+      serviceId: service-h5
+suce
+ribbon:
+  ReadTimeout: 1000
+  ConnectTimeout: 10000
+  eager-load:
+    #取消懒加载
+    enabled: true
+    clients: service-api, service-order, service-user,service-dictionary
+
+hystrix:
+  threadpool:
+    default:
+      coreSize: 300
+      maxQueueSize: 200
+      queueSizeRejectionThreshold: 150
+  command:
+    default:
+      circuitBreaker:
+        requestVolumeThreshold: 50
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          strategy: THREAD
+          semaphore:
+            maxConcurrentRequests: 1000
+          thread:
+            timeoutInMilliseconds: 40000
+
+logging:
+  config: classpath:log4j2.xml

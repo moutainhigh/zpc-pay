@@ -1,0 +1,22 @@
+server:
+  port: 9100
+#spring配置
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: service-api #服务名称
+  cloud:
+    config:
+      name: service-api,common,swagger
+      discovery:
+        enabled: true
+        service-id: config-server
+#配置Eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:6969/eureka/
+  instance:
+    prefer-ip-address: true #使用ip地址注册
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
